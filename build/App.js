@@ -18969,7 +18969,7 @@ class DuckSightings extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Compon
 
     componentDidMount() {
         __WEBPACK_IMPORTED_MODULE_1_axios___default.a.get('localhost:8081/sightings').then(res => {
-            this.sightings = JSON.parse(res);
+            this.sightings = JSON.parse(res).map(sighting => __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__DuckInfo_js__["a" /* default */], { sighting: sighting }));
         });
     }
 
@@ -18977,9 +18977,7 @@ class DuckSightings extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Compon
         return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             'div',
             { className: 'container duck-sightings' },
-            'this.sightings.map((sighting) =>',
-            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__DuckInfo_js__["a" /* default */], { sighting: sighting }),
-            ');'
+            this.sightings
         );
     }
 }
@@ -19886,6 +19884,10 @@ module.exports = function spread(callback) {
 
 
 class DuckInfo extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
+    constructor(props) {
+        super(props);
+    }
+
     render() {
         return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             'div',
@@ -19897,31 +19899,31 @@ class DuckInfo extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
                     'li',
                     null,
                     'ID ',
-                    props.id
+                    this.props.id
                 ),
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                     'li',
                     null,
                     'Species: ',
-                    props.species
+                    this.props.species
                 ),
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                     'li',
                     null,
                     'Amount: ',
-                    props.count
+                    this.props.count
                 ),
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                     'li',
                     null,
                     'Sighted at ',
-                    props.dateTime
+                    this.props.dateTime
                 ),
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                     'li',
                     null,
                     'Additional info: ',
-                    props.description
+                    this.props.description
                 )
             )
         );
