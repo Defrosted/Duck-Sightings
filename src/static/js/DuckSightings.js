@@ -16,6 +16,7 @@ export default class DuckSightings extends React.Component {
         };
         this.changeSort = this.changeSort.bind(this);
         this.fetchSightings = this.fetchSightings.bind(this);
+        this.toggleModal = this.toggleModal.bind(this);
     }
 
     componentDidMount() {
@@ -29,7 +30,7 @@ export default class DuckSightings extends React.Component {
 
     fetchSightings() {
         this.reqToken = axios.CancelToken.source();
-        axios.get('http://localhost:8081/sightings', {
+        axios.get(this.props.url + '/sightings', {
             cancelToken: this.reqToken.token
             })
             .then((result) => {
@@ -73,12 +74,13 @@ export default class DuckSightings extends React.Component {
         } else {
             //Actual render
             return (
-                <div className='container duck-sightings'>
-                <DuckAdd visible={showModal} sightings={this.state.sightings} callback={this.fetchSightings} />
+                <div className='container sightings-container'>
+                <DuckAdd visible={showModal} callback={this.fetchSightings}
+                toggle={this.toggleModal} url={this.props.url} />
                     <div className='sightings-header'>
                         <h2>Recent duck sightings</h2>
                         <div className='sightings-header-buttons'>
-                            <label>Sort by:</label>
+                            <label>Sorted by:</label>
                             <Button bsStyle='info' onClick={this.changeSort}>
                                 {(sortNewest) ? "Newest" : "Oldest"}
                             </Button>
@@ -87,9 +89,11 @@ export default class DuckSightings extends React.Component {
                             </Button>
                         </div>
                     </div>
-                    {sightings.map(sighting => {
-                        return <DuckInfo key={sighting.id} sighting={sighting} />
-                    })}
+                    <div className='duck-sightings'>
+                        {sightings.map(sighting => {
+                            return <DuckInfo key={sighting.id} sighting={sighting} />
+                        })}
+                    </div>
                 </div>
             );
         }

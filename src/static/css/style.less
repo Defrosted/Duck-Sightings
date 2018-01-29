@@ -1,3 +1,5 @@
+//Google fonts
+@import url('https://fonts.googleapis.com/css?family=Ubuntu');
 //Colors
 @col-green: #74AFAD;
 @col-green-dark: #558C89;
@@ -9,6 +11,7 @@
 body {
     background-color: @col-orange;
     color: white;
+    font-family: 'Ubuntu', sans-serif;
 }
 
 .wrapper {
@@ -24,41 +27,55 @@ body {
     }
 }
 
-.duck-sightings {
+.sightings-container {
     margin-top: 3%;
     padding: 0;
     width: 75%;
     background: @col-orange-dark;
     border-radius: 15px;
-    h2 {
-        margin-bottom: 0;
-        margin-left: 5%;
-        padding: 5px;
-        display: inline-block;
+    overflow: hidden;
+    .sightings-header {
+        h2 {
+            margin-bottom: 0;
+            margin-left: 5%;
+            padding: 5px;
+            display: inline-block;
+        }
+        .btn {
+            display: inline-block;
+            margin-left: 5px;
+            min-width: 75px;
+        }
+        label {
+            font-size: 14px;
+        }
+        .sightings-header-buttons {
+            display: block;
+            padding: 5px;
+            margin-left: 5%;
+        }
     }
-    .btn {
-        display: inline-block;
-        margin-left: 5px;
-        min-width: 75px;
-    }
-    label {
-        font-size: 14px;
-    }
-    .sightings-header-buttons {
-        display: block;
-        padding: 5px;
-        margin-left: 5%;
-    }
-    ul {
-        padding: 2%;
-        margin: 0;
-        font-size: 16px;
-        list-style: none;
-        &:nth-child(even) {
+    .duck-sightings {
+        ul {
+            padding: 2%;
+            margin: 0;
+            font-size: 16px;
+            list-style: none;
+        }
+        .sighting:nth-child(even) {
             background: @col-green-dark;
         }
-        &:nth-child(odd) {
+        .sighting:nth-child(odd) {
             background: @col-green;
         }
     }
+}
+
+.modal-content {
+    .modal-header {
+        .modal-title {
+            font-size: 24px;
+        }
+    }
+    color: black;
 }
