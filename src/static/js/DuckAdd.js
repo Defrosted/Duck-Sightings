@@ -9,6 +9,7 @@ export default class DuckAdd extends React.Component {
         super(props);
         this.state = {
             isLoaded: false,
+            url: this.props.url,
             dateString: moment().format('HH:mm, DD.MM.YYYY'),
             description: '',
             species: [],
@@ -25,7 +26,7 @@ export default class DuckAdd extends React.Component {
     }
 
     componentDidMount() {
-        this.fetchSpecies();
+        this.fetchSpecies(this.props.url);
     }
 
     componentWillUnmount() {
@@ -34,11 +35,11 @@ export default class DuckAdd extends React.Component {
         this.sendToken.cancel();
     }
 
-    fetchSpecies() {
+    fetchSpecies(url) {
         //Set up cancel-token
         this.reqToken = axios.CancelToken.source();
         //AJAX-request
-        axios.get(this.props.url + '/species', {
+        axios.get(url + '/species', {
             cancelToken: this.reqToken.token
             })
             .then((result) => {
@@ -68,7 +69,7 @@ export default class DuckAdd extends React.Component {
             })
             .then(() => {
                 this.props.toggle();
-                this.props.callback();
+                this.props.callback(this.state.url);
             })
             .catch(thrown => {
                 if(!axios.isCancel(thrown))

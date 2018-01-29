@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import moment from 'moment';
-import Button from 'react-bootstrap/lib/Button';
+import { Button } from 'react-bootstrap';
 import DuckInfo from './DuckInfo.js';
 import DuckAdd from './DuckAdd.js';
 

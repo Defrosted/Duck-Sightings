@@ -12,19 +12,29 @@ class DuckInfo extends React.Component {
             return ('0' + n).slice(-2);
         }
 
-        const date = moment(time, 'YYYY-MM-DD-HH:mm:ssZ');
-        date.utc();
-        return pad(date.hour()) + ':' + pad(date.minute())
-        + ', on ' + pad(date.date()) + '.' + pad(date.month()+1) + '.' + date.year();
+        const date = moment.utc(time, 'YYYY-MM-DD-HH:mm:ssZ');
+        return date.format('HH:mm, DD.MM.YYYY');
     }
     
     render() {
         return(
             <ul className='sighting'>
-                <li>Species: {this.sighting.species}</li>
-                <li>Sighted {this.sighting.count} individual(s)</li>
-                <li>Seen at {this.formatTime(this.sighting.dateTime)}</li>
-                <li>Additional info: {this.sighting.description}</li>
+                <li>
+                    <div>Species:</div>
+                    <div>{this.sighting.species}</div>
+                </li>
+                <li>
+                    <div>Sighted amount:</div>
+                    <div>{this.sighting.count}</div>
+                </li>
+                <li>
+                    <div>Seen at:</div>
+                    <div>{this.formatTime(this.sighting.dateTime)}</div>
+                </li>
+                <li>
+                    <div>Additional info:</div>
+                    <div>{this.sighting.description}</div>
+                </li>
             </ul>
         );
     }
