@@ -1,17 +1,21 @@
 import React from 'react';
 import axios from 'axios';
-import DuckInfo from './DuckInfo.js';
+import moment from 'moment';
 import Button from 'react-bootstrap/lib/Button';
+import DuckInfo from './DuckInfo.js';
+import DuckAdd from './DuckAdd.js';
 
-class DuckSightings extends React.Component {
+export default class DuckSightings extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             isLoaded: false,
             sortNewest: true,
+            showModal: false,
             sightings: []
         };
         this.changeSort = this.changeSort.bind(this);
+        this.fetchSightings = this.fetchSightings.bind(this);
     }
 
     componentDidMount() {
@@ -46,13 +50,23 @@ class DuckSightings extends React.Component {
         });
     }
 
-    render() {
-        const { isLoaded, sortNewest, sightings } = this.state;
+    sortSightings(sightings) {
         sightings.sort((a, b) => {
-            a = new Date(a.dateTime);
-            b = new Date(b.dateTime);
-            return (sortNewest) ? b.getTime() - a.getTime() : a.getTime() - b.getTime();
+            a = moment(a.dateTime);
+            b = moment(b.dateTime);
+            return (this.state.sortNewest) ? b.unix() - a.unix() : a.unix() - b.unix();
         });
+    }
+
+    toggleModal() {
+        this.setState({
+            showModal: ((this.state.showModal) ? false : true)
+        });
+    }
+
+    render() {
+        const { isLoaded, showModal, sortNewest, sightings } = this.state;
+        this.sortSightings(sightings);
 
         if (!isLoaded) {
             return <div>Loading...</div>
@@ -60,11 +74,18 @@ class DuckSightings extends React.Component {
             //Actual render
             return (
                 <div className='container duck-sightings'>
+                <DuckAdd visible={showModal} sightings={this.state.sightings} callback={this.fetchSightings} />
                     <div className='sightings-header'>
                         <h2>Recent duck sightings</h2>
-                        <Button bsStyle='info' onClick={this.changeSort}>
-                            {(sortNewest) ? "Newest" : "Oldest"}
-                        </Button>
+                        <div className='sightings-header-buttons'>
+                            <label>Sort by:</label>
+                            <Button bsStyle='info' onClick={this.changeSort}>
+                                {(sortNewest) ? "Newest" : "Oldest"}
+                            </Button>
+                            <Button bsStyle='success' onClick={this.toggleModal}>
+                                Add sighting
+                            </Button>
+                        </div>
                     </div>
                     {sightings.map(sighting => {
                         return <DuckInfo key={sighting.id} sighting={sighting} />
@@ -74,5 +95,3 @@ class DuckSightings extends React.Component {
         }
     }
 }
-
-export default DuckSightings;
