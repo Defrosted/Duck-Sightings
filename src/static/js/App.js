@@ -7,7 +7,7 @@ class App extends React.Component {
     render() {
         return (
             <div className='wrapper'>
-                <Header name='Duck Sighters United'/>
+                <Header name='Bird Spotters United'/>
                 <DuckSightings />
             </div>
         );
