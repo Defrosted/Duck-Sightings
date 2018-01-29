@@ -1,4 +1,5 @@
 import React from 'react';
+import moment from 'moment';
 
 class DuckInfo extends React.Component {
     constructor(props) {
@@ -11,9 +12,10 @@ class DuckInfo extends React.Component {
             return ('0' + n).slice(-2);
         }
 
-        const date = new Date(time);
-        return pad(date.getHours()) + ':' + pad(date.getMinutes())
-        + ', on ' + pad(date.getDay()) + '.' + pad(date.getMonth()) + '.' + date.getFullYear();
+        const date = moment(time, 'YYYY-MM-DD-HH:mm:ssZ');
+        date.utc();
+        return pad(date.hour()) + ':' + pad(date.minute())
+        + ', on ' + pad(date.date()) + '.' + pad(date.month()+1) + '.' + date.year();
     }
     
     render() {
