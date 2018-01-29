@@ -1,0 +1,48 @@
+//Colors
+@col-green: #74AFAD;
+@col-green-dark: #558C89;
+@col-light: #ECECEA;
+@col-orange: #FFBA49;
+@col-orange-dark: #D9853B;
+@col-red: #F4594F;
+
+body {
+    background-color: @col-orange;
+    color: white;
+}
+
+.wrapper {
+    margin: auto;
+    width: 100%;
+}
+
+.header {
+    width: 100%;
+    background-color: @col-red;
+    h1 {
+        text-align: center;
+    }
+}
+
+.duck-sightings {
+    margin-top: 3%;
+    padding: 0;
+    width: 75%;
+    background: @col-orange-dark;
+    h2 {
+        margin-left: 5%;
+        padding: 5px;
+    }
+    ul {
+        padding: 2%;
+        margin: 0;
+        font-size: 16px;
+        list-style: none;
+        &:nth-child(even) {
+            background: @col-green-dark;
+        }
+        &:nth-child(odd) {
+            background: @col-green;
+        }
+    }
+}
