@@ -19,16 +19,26 @@ body {
     width: 100%;
 }
 
-.header {
+.header-container {
     width: 100%;
     background-color: @col-red;
+    padding: 0;
     h1 {
         text-align: center;
+        padding: 20px;
+    }
+    .dev-bar {
+        width: 100%;
+        padding: 10px;
+        background-color: @col-orange-dark;
+        label, input, button {
+            margin-left: 10px;
+        }
     }
 }
 
 .sightings-container {
-    margin-top: 3%;
+    margin: 3% auto;
     padding: 0;
     width: 75%;
     background: @col-orange-dark;

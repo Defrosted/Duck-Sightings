@@ -10,6 +10,7 @@ export default class DuckSightings extends React.Component {
         super(props);
         this.state = {
             isLoaded: false,
+            url: this.props.url,
             sortNewest: true,
             showModal: false,
             sightings: []
@@ -19,8 +20,17 @@ export default class DuckSightings extends React.Component {
         this.toggleModal = this.toggleModal.bind(this);
     }
 
+    componentWillReceiveProps(nextProps) {
+        if(this.props.url != nextProps.url) {
+            this.setState({
+                url: nextProps.url
+            });
+            this.fetchSightings(nextProps.url);
+        }
+    }
+
     componentDidMount() {
-        this.fetchSightings();
+        this.fetchSightings(this.state.url);
     }
 
     componentWillUnmount() {
@@ -28,9 +38,9 @@ export default class DuckSightings extends React.Component {
         this.reqToken.cancel();
     }
 
-    fetchSightings() {
+    fetchSightings(url) {
         this.reqToken = axios.CancelToken.source();
-        axios.get(this.props.url + '/sightings', {
+        axios.get(url + '/sightings', {
             cancelToken: this.reqToken.token
             })
             .then((result) => {
