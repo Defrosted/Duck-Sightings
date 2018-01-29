@@ -18,14 +18,12 @@ class DuckInfo extends React.Component {
     
     render() {
         return(
-            <div className='sighting'>
-                <ul>
-                    <li>Species: {this.sighting.species}</li>
-                    <li>Sighted {this.sighting.count} individual(s)</li>
-                    <li>Sighted at {this.formatTime(this.sighting.dateTime)}</li>
-                    <li>Additional info: {this.sighting.description}</li>
-                </ul>
-            </div>
+            <ul>
+                <li>Species: {this.sighting.species}</li>
+                <li>Sighted {this.sighting.count} individual(s)</li>
+                <li>Seen at {this.formatTime(this.sighting.dateTime)}</li>
+                <li>Additional info: {this.sighting.description}</li>
+            </ul>
         );
     }
 }
