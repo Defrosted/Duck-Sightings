@@ -7,8 +7,8 @@ const extractLess = new ExtractTextPlugin( {
 
 module.exports = {
     entry: [
-        __dirname + '/src/static/js/App.js',
-        __dirname + '/src/static/css/style.less'
+        __dirname + '/src/js/App.js',
+        __dirname + '/src/css/style.less'
     ],
 
     output: {
@@ -34,13 +34,20 @@ module.exports = {
                         loader: "less-loader"
                     }],
                 })
+            },
+            {
+                test: /\.(jpe?g|png|gif|svg)$/i,
+                use: [
+                  'url-loader?limit=10000',
+                  'img-loader'
+                ]
             }
         ]
     },
 
     plugins: [
         new HtmlPlugin({
-            template: 'src/static/index.html'
+            template: 'src/index.html'
         }),
         extractLess
     ]

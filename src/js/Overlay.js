@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button, Form, FormControl, FormGroup, ControlLabel } from 'react-bootstrap';
+import logo from '../img/rubberduck.png';
 
 export default class Header extends React.Component {
     constructor(props) {
@@ -28,6 +29,7 @@ export default class Header extends React.Component {
             return (
                 <div className='container header-container'>
                     <div className='header'>
+                        <img src={logo} />
                         <h1>{this.props.name}</h1>
                     </div>
                 </div>
