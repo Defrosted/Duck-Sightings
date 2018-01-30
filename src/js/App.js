@@ -7,7 +7,7 @@ class App extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            url: 'http://localhost:8081'
+            url: 'http://localhost'
         };
         this.updateUrl = this.updateUrl.bind(this);
     }

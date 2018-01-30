@@ -25,6 +25,16 @@ export default class DuckAdd extends React.Component {
         this.handleSpecChange = this.handleSpecChange.bind(this);
     }
 
+    componentWillReceiveProps(nextProps) {
+        //Update URL if changed
+        if(this.props.url != nextProps.url) {
+            this.setState({
+                url: nextProps.url
+            });
+            this.fetchSpecies(nextProps.url);
+        }
+    }
+
     componentDidMount() {
         this.fetchSpecies(this.props.url);
     }

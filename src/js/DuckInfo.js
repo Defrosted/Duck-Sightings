@@ -4,7 +4,6 @@ import moment from 'moment';
 class DuckInfo extends React.Component {
     constructor(props) {
         super(props);
-        this.sighting = props.sighting;
     }
 
     formatTime(time) {
@@ -21,19 +20,19 @@ class DuckInfo extends React.Component {
             <ul className='sighting'>
                 <li>
                     <div>Species:</div>
-                    <div>{this.sighting.species}</div>
+                    <div>{this.props.sighting.species}</div>
                 </li>
                 <li>
                     <div>Sighted amount:</div>
-                    <div>{this.sighting.count}</div>
+                    <div>{this.props.sighting.count}</div>
                 </li>
                 <li>
                     <div>Seen at:</div>
-                    <div>{this.formatTime(this.sighting.dateTime)}</div>
+                    <div>{this.formatTime(this.props.sighting.dateTime)}</div>
                 </li>
                 <li>
                     <div>Additional info:</div>
-                    <div>{this.sighting.description}</div>
+                    <div>{this.props.sighting.description}</div>
                 </li>
             </ul>
         );

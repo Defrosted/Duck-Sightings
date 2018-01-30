@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import moment from 'moment';
 import { Button } from 'react-bootstrap';
+import Loading from 'react-loading-components';
 import DuckInfo from './DuckInfo.js';
 import DuckAdd from './DuckAdd.js';
 
@@ -21,6 +22,7 @@ export default class DuckSightings extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
+        //Update URL if changed
         if(this.props.url != nextProps.url) {
             this.setState({
                 url: nextProps.url
@@ -80,7 +82,24 @@ export default class DuckSightings extends React.Component {
         this.sortSightings(sightings);
 
         if (!isLoaded) {
-            return <div>Loading...</div>
+            return (
+                <div className='container sightings-container'>
+                <DuckAdd visible={showModal} callback={this.fetchSightings}
+                toggle={this.toggleModal} url={this.props.url} />
+                    <div className='sightings-header'>
+                        <h2>Recent duck sightings</h2>
+                    </div>
+                    <div className='duck-sightings'>
+                        <div className='loading'>
+                            <Loading 
+                              className='loading'
+                              type='oval' width={100} height={100}
+                              fill='#558C89'
+                            />
+                        </div>
+                    </div>
+                </div>
+            );
         } else {
             //Actual render
             return (
