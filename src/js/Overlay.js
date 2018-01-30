@@ -28,7 +28,7 @@ export default class Header extends React.Component {
         if(!this.props.development) {
             return (
                 <div className='container header-container'>
-                    <div className='header'>
+                    <div className='logo' className='header'>
                         <img src={logo} />
                         <h1>{this.props.name}</h1>
                     </div>
@@ -38,6 +38,7 @@ export default class Header extends React.Component {
             return (
                 <div className='container header-container'>
                     <div className='header'>
+                        <img className='logo' src={logo} />
                         <h1>{this.props.name}</h1>
                     </div>
                     <div className='dev-bar'>

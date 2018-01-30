@@ -24,9 +24,17 @@ body {
     background-color: @col-red;
     padding: 0;
     overflow: hidden;
-    h1 {
+    .header {
+        display: block;
         text-align: center;
-        padding: 20px;
+        h1 {
+            display: inline-block;
+            padding: 20px;
+        }
+        .logo {
+            display: inline-block;
+            max-width: 100px;
+        }
     }
     .dev-bar {
         width: 100%;
@@ -34,6 +42,10 @@ body {
         background-color: @col-orange-dark;
         label, input, button {
             margin-left: 10px;
+        }
+        .form-group {
+            display: block;
+            text-align: center;
         }
     }
 }
