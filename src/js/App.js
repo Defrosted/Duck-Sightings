@@ -16,7 +16,6 @@ class App extends React.Component {
         this.setState({
             url: url
         })
-        console.log(this.state.url);
     }
 
     render() {

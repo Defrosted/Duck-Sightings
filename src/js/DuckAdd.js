@@ -67,7 +67,9 @@ export default class DuckAdd extends React.Component {
 
     addNew() {
         //Validate
-        if(this.validateCount() != 'error' && this.validateTimeString() != 'error') {
+        if(this.validateCount() != 'error'
+        && this.validateTimeString() != 'error'
+        && this.validateSpecies() != 'error') {
             this.sendToken = axios.CancelToken.source();
             axios.post(this.props.url + '/sightings', {
                 dateTime: moment.utc(this.state.dateString, 'HH:mm, DD.MM.YYYY', true).toISOString(),
@@ -97,8 +99,9 @@ export default class DuckAdd extends React.Component {
 
     //Validate form time-field
     validateTimeString() {
-        const date = moment.utc(this.state.dateString, 'HH:mm, DD.MM.YYYY', true);
-        if(date.isValid()) {
+        const date = moment(this.state.dateString, 'HH:mm, DD.MM.YYYY', true);
+        //Date is valid and <= than current time.
+        if(date.isValid() && date.valueOf() <= moment.utc().valueOf()) {
             return null;
         } else
             return 'error';
@@ -134,6 +137,17 @@ export default class DuckAdd extends React.Component {
         })
     }
 
+    //Validate species so user can't ie. inject invalid values by adding a new <option> through dev-tools
+    validateSpecies() {
+        var validSpecies = false;
+        for(var i = 0; i < this.state.species.length; i++) {
+            if(this.state.species[i].name == this.state.selSpecies)
+                validSpecies = true;
+        }
+
+        return ((validSpecies) ? null : 'error');
+    }
+
     render() {
         if(!this.props.visible)
             return null;
@@ -153,7 +167,10 @@ export default class DuckAdd extends React.Component {
                     </Modal.Header>
                     <Modal.Body>
                         <Form>
-                            <FormGroup controlId='formSpecies'>
+                            <FormGroup
+                              controlId='formSpecies'
+                              validationState={this.validateSpecies()}
+                            >
                                 <ControlLabel>Select species</ControlLabel>
                                 <FormControl
                                   componentClass='select'
@@ -188,7 +205,7 @@ export default class DuckAdd extends React.Component {
                                   onChange={this.handleTimeChange}
                                 />
                                 <FormControl.Feedback />
-                                <HelpBlock>Format 'HH:mm, DD.MM.YYYY'</HelpBlock>
+                                <HelpBlock>Format 'HH:mm, DD.MM.YYYY'. Only past times are allowed.</HelpBlock>
                             </FormGroup>
                             <FormGroup
                               controlId='formDesc'
