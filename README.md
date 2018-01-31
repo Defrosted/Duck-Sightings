@@ -9,6 +9,11 @@ You can get the API-server needed from [here](https://github.com/Vincit/summer-2
 
 I've included a compiled version in the build-folder, which doesn't require any server to run other than the API-server the data is fetched from.
 
+These commands first require that the node-modules are installed:
+```
+npm install
+```
+
 To run a dev-server, run
 ```
 npm run start
