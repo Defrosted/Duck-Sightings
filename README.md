@@ -1,5 +1,5 @@
 #Duck Sightings
-This work was my first touch to React, Node and Less.
+This work was my first touch to React, Node and Less. It uses webpack to run on.
 It's the interface to access an API server about duck sightings, and the
 pre-assignment for Vincit's search of summer interns.
 
