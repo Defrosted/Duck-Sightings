@@ -1,0 +1,104 @@
+@import url(https://fonts.googleapis.com/css?family=Ubuntu);body {
+  background-color: #FFBA49;
+  color: white;
+  font-family: 'Ubuntu', sans-serif;
+}
+.wrapper {
+  margin: auto;
+  width: 100%;
+}
+.header-container {
+  width: 100%;
+  background-color: #F4594F;
+  padding: 0;
+  overflow: hidden;
+}
+.header-container .header {
+  display: block;
+  text-align: center;
+}
+.header-container .header h1 {
+  display: inline-block;
+  padding: 20px;
+}
+.header-container .header .logo {
+  display: inline-block;
+  max-width: 100px;
+}
+.header-container .dev-bar {
+  width: 100%;
+  padding: 10px;
+  background-color: #D9853B;
+}
+.header-container .dev-bar label,
+.header-container .dev-bar input,
+.header-container .dev-bar button {
+  margin-left: 10px;
+}
+.header-container .dev-bar .form-group {
+  display: block;
+  text-align: center;
+}
+.sightings-container {
+  margin: 3% auto;
+  padding: 0;
+  width: 75%;
+  background: #D9853B;
+  border-radius: 15px;
+  overflow: hidden;
+}
+.sightings-container .sightings-header h2 {
+  margin-bottom: 0;
+  margin-left: 5%;
+  padding: 5px;
+  display: inline-block;
+}
+.sightings-container .sightings-header .btn {
+  display: inline-block;
+  margin-left: 5px;
+  min-width: 75px;
+}
+.sightings-container .sightings-header label {
+  font-size: 14px;
+}
+.sightings-container .sightings-header .sightings-header-buttons {
+  display: block;
+  padding: 5px;
+  margin-left: 5%;
+}
+.sightings-container .duck-sightings ul {
+  padding: 2%;
+  margin: 0;
+  font-size: 16px;
+  list-style: none;
+  overflow: hidden;
+}
+.sightings-container .duck-sightings ul li div {
+  display: inline-block;
+}
+.sightings-container .duck-sightings ul li div:nth-child(even) {
+  margin-left: 10px;
+  font-weight: bold;
+}
+.sightings-container .duck-sightings .sighting:nth-child(even) {
+  background: #558C89;
+}
+.sightings-container .duck-sightings .sighting:nth-child(odd) {
+  background: #74AFAD;
+}
+.sightings-container .duck-sightings .loading {
+  margin: 5% 0;
+  display: block;
+  text-align: center;
+}
+.sightings-container .duck-sightings .loading svg {
+  display: inline-block;
+}
+.modal-content {
+  color: black;
+}
+.modal-content .modal-header .modal-title {
+  font-size: 24px;
+}
+
+/*# sourceMappingURL=main.css.map*/
