@@ -28217,7 +28217,7 @@ var App = function (_React$Component) {
         var _this = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
 
         _this.state = {
-            url: 'http://localhost:8081'
+            url: 'http://localhost'
         };
         return _this;
     }
@@ -45539,6 +45539,7 @@ var DuckSightings = function (_React$Component) {
 
         _this.state = {
             isLoaded: false,
+            loadFailed: false,
             sortNewest: true,
             showModal: false,
             sightings: []
@@ -45574,7 +45575,12 @@ var DuckSightings = function (_React$Component) {
                     sightings: result.data
                 });
             }).catch(function (thrown) {
-                if (!_axios2.default.isCancel(thrown)) console.log('Error ' + thrown.message);
+                if (!_axios2.default.isCancel(thrown)) {
+                    console.log('Error ' + thrown.message);
+                    _this2.setState({
+                        loadFailed: true
+                    });
+                }
             });
         }
     }, {
@@ -45636,7 +45642,7 @@ var DuckSightings = function (_React$Component) {
                 return _react2.default.createElement(_DuckInfo2.default, { key: sighting.id, sighting: sighting });
             });
 
-            var loadingElement = _react2.default.createElement(
+            var loadingElement = !this.state.loadFailed ? _react2.default.createElement(
                 'div',
                 { className: 'loading' },
                 _react2.default.createElement(_reactLoadingComponents2.default, {
@@ -45644,6 +45650,10 @@ var DuckSightings = function (_React$Component) {
                     type: 'oval', width: 100, height: 100,
                     fill: '#558C89'
                 })
+            ) : _react2.default.createElement(
+                'div',
+                { className: 'loading' },
+                'Failed to load data!'
             );
 
             return _react2.default.createElement(

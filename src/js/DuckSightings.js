@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import moment from 'moment';
-import { Button } from 'react-bootstrap';
+import { Button, Alert } from 'react-bootstrap';
 import Loading from 'react-loading-components';
 import DuckInfo from './DuckInfo.js';
 import DuckAdd from './DuckAdd.js';
@@ -11,6 +11,7 @@ export default class DuckSightings extends React.Component {
         super(props);
         this.state = {
             isLoaded: false,
+            loadFailed: false,
             sortNewest: true,
             showModal: false,
             sightings: []
@@ -41,8 +42,12 @@ export default class DuckSightings extends React.Component {
                 });
             })
             .catch((thrown) => {
-                if(!axios.isCancel(thrown))
+                if(!axios.isCancel(thrown)) {
                     console.log('Error ' + thrown.message);
+                    this.setState({
+                        loadFailed: true
+                    });
+                }
             });
     }
 
@@ -85,13 +90,19 @@ export default class DuckSightings extends React.Component {
             return <DuckInfo key={sighting.id} sighting={sighting} />
         });
 
-        const loadingElement = (
+        const loadingElement = (!this.state.loadFailed) ? (
             <div className='loading'>
                 <Loading 
                     className='loading'
                     type='oval' width={100} height={100}
                     fill='#558C89'
                 />
+            </div>
+        ) : (
+            <div className='loading'>
+                <Alert bsStyle='danger'>
+                    <h4>Failed to load data!</h4>
+                </Alert>
             </div>
         );
 
