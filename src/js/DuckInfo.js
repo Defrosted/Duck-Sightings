@@ -1,7 +1,7 @@
 import React from 'react';
 import moment from 'moment';
 
-class DuckInfo extends React.Component {
+export default class DuckInfo extends React.Component {
     constructor(props) {
         super(props);
     }
@@ -38,5 +38,3 @@ class DuckInfo extends React.Component {
         );
     }
 }
-
-export default DuckInfo;

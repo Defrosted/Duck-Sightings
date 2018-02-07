@@ -1,31 +1,21 @@
 import ReactDOM from 'react-dom';
 import React from 'react';
 import DuckSightings from './DuckSightings.js';
-import Header from './Overlay.js';
+import Header from './Header.js';
 
 class App extends React.Component {
     constructor(props) {
         super(props);
+        //Setting for the url of the dev-server
         this.state = {
-            url: 'http://localhost'
+            url: 'http://localhost:8081'
         };
-        this.updateUrl = this.updateUrl.bind(this);
-    }
-
-    updateUrl(url) {
-        this.setState({
-            url: url
-        })
     }
 
     render() {
         return (
             <div className='wrapper'>
-                <Header name='Duck Spotters United'
-                  update={this.updateUrl}
-                  url={this.state.url}
-                  development={true}
-                />
+                <Header name='Duck Spotters United' />
                 <DuckSightings url={this.state.url}/>
             </div>
         );

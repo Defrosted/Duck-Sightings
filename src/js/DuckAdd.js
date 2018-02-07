@@ -9,11 +9,10 @@ export default class DuckAdd extends React.Component {
         super(props);
         this.state = {
             isLoaded: false,
-            url: this.props.url,
             dateString: moment().format('HH:mm, DD.MM.YYYY'),
             description: '',
             species: [],
-            selSpecies: '',
+            selectedSpecies: '',
             count: '1'
         };
 
@@ -23,16 +22,6 @@ export default class DuckAdd extends React.Component {
         this.handleDescChange = this.handleDescChange.bind(this);
         this.handleCountChange = this.handleCountChange.bind(this);
         this.handleSpecChange = this.handleSpecChange.bind(this);
-    }
-
-    componentWillReceiveProps(nextProps) {
-        //Update URL if changed
-        if(this.props.url != nextProps.url) {
-            this.setState({
-                url: nextProps.url
-            });
-            this.fetchSpecies(nextProps.url);
-        }
     }
 
     componentDidMount() {
@@ -49,14 +38,14 @@ export default class DuckAdd extends React.Component {
         //Set up cancel-token
         this.reqToken = axios.CancelToken.source();
         //AJAX-request
-        axios.get(url + '/species', {
+        axios.get(this.props.url + '/species', {
             cancelToken: this.reqToken.token
             })
             .then((result) => {
                 this.setState({
                     isLoaded: true,
                     species: result.data,
-                    selSpecies: result.data[0].name
+                    selectedSpecies: result.data[0].name
                 });
             })
             .catch(thrown => {
@@ -67,21 +56,21 @@ export default class DuckAdd extends React.Component {
 
     addNew() {
         //Validate
-        if(this.validateCount() != 'error'
-        && this.validateTimeString() != 'error'
-        && this.validateSpecies() != 'error') {
+        if(this.validateCount()
+        && this.validateTimeString()
+        && this.validateSpecies()) {
             this.sendToken = axios.CancelToken.source();
             axios.post(this.props.url + '/sightings', {
                 dateTime: moment.utc(this.state.dateString, 'HH:mm, DD.MM.YYYY', true).toISOString(),
                 description: this.state.description,
-                species: this.state.selSpecies,
+                species: this.state.selectedSpecies,
                 count: parseInt(this.state.count)
             }, {
                 cancelToken: this.sendToken.token
             })
             .then(() => {
-                this.props.toggle();
-                this.props.callback(this.state.url);
+                this.props.toggleModal();
+                this.props.fetchSightings(this.state.url);
             })
             .catch(thrown => {
                 if(!axios.isCancel(thrown))
@@ -101,10 +90,7 @@ export default class DuckAdd extends React.Component {
     validateTimeString() {
         const date = moment(this.state.dateString, 'HH:mm, DD.MM.YYYY', true);
         //Date is valid and <= than current time.
-        if(date.isValid() && date.valueOf() <= moment.utc().valueOf()) {
-            return null;
-        } else
-            return 'error';
+        return (date.isValid() && date.valueOf() <= moment.utc().valueOf());
     }
 
     //Handle form description-field change
@@ -124,108 +110,95 @@ export default class DuckAdd extends React.Component {
     //Validate form count-field
     validateCount() {
         const n = parseInt(this.state.count);
-        if(n != NaN && n > 0)
-            return null;
-        else
-            return 'error';
+        return (n != NaN && n > 0);
     }
 
     //Handle form species-field change
     handleSpecChange(e) {
         this.setState({
-            selSpecies: e.target.value
+            selectedSpecies: e.target.value
         })
     }
 
     //Validate species so user can't ie. inject invalid values by adding a new <option> through dev-tools
     validateSpecies() {
-        var validSpecies = false;
-        for(var i = 0; i < this.state.species.length; i++) {
-            if(this.state.species[i].name == this.state.selSpecies)
-                validSpecies = true;
-        }
-
-        return ((validSpecies) ? null : 'error');
+        return (this.state.species.find((species) => {
+            return species.name == this.state.selectedSpecies;
+        })) ? true : false;
     }
 
     render() {
-        if(!this.props.visible)
-            return null;
-        else if(!this.state.isLoaded) {
-            return (
-                <Modal show={this.props.visible}>
-                    <Modal.Header closeButton onClick={this.props.toggle}>
-                        <Modal.Title>Loading...</Modal.Title>
-                    </Modal.Header>
-                </Modal>
-            );
-        } else {
-            return (
-                <Modal show={this.props.visible}>
-                    <Modal.Header closeButton onClick={this.props.toggle}>
-                        <Modal.Title>Add new sighting</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                        <Form>
-                            <FormGroup
-                              controlId='formSpecies'
-                              validationState={this.validateSpecies()}
-                            >
-                                <ControlLabel>Select species</ControlLabel>
-                                <FormControl
-                                  componentClass='select'
-                                  onChange={this.handleSpecChange}
-                                >
-                                    {this.state.species.map(species => {
-                                        return (<option key={species.name} value={species.name}>{species.name}</option>)
-                                    })}
-                                </FormControl>
-                            </FormGroup>
-                            <FormGroup
-                              controlId='formCount'
-                              validationState={this.validateCount()}
-                            >
-                                <ControlLabel>Amount seen</ControlLabel>
-                                <FormControl
-                                  type='text'
-                                  value={this.state.count}
-                                  onChange={this.handleCountChange}
-                                />
-                                <FormControl.Feedback />
-                                <HelpBlock>Values above zero are valid.</HelpBlock>
-                            </FormGroup>
-                            <FormGroup
-                              controlId='formTime'
-                              validationState={this.validateTimeString()}
-                            >
-                                <ControlLabel>Time of sighting</ControlLabel>
-                                <FormControl
-                                  type='text'
-                                  value={this.state.dateString}
-                                  onChange={this.handleTimeChange}
-                                />
-                                <FormControl.Feedback />
-                                <HelpBlock>Format 'HH:mm, DD.MM.YYYY'. Only past times are allowed.</HelpBlock>
-                            </FormGroup>
-                            <FormGroup
-                              controlId='formDesc'
-                            >
-                                <ControlLabel>Description</ControlLabel>
-                                <FormControl 
-                                  type='text'
-                                  value={this.state.description}
-                                  placeholder='Additional info...'
-                                  onChange={this.handleDescChange}
-                                />
-                            </FormGroup>
-                        </Form>
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <Button bsStyle='success' onClick={this.addNew}>Add</Button>
-                        <Button bsStyle='info' onClick={this.props.toggle}>Cancel</Button>
-                    </Modal.Footer>
-                </Modal>
-            );
-        }
+        const modalBody = (
+            <Modal.Body>
+                <Form>
+                    <FormGroup
+                        controlId='formSpecies'
+                        validationState={(this.validateSpecies() ? null : 'error')}
+                    >
+                        <ControlLabel>Select species</ControlLabel>
+                        <FormControl
+                            componentClass='select'
+                            onChange={this.handleSpecChange}
+                        >
+                            {this.state.species.map((species) => {
+                                return (<option key={species.name} value={species.name}>{species.name}</option>)
+                            })}
+                        </FormControl>
+                    </FormGroup>
+                    <FormGroup
+                        controlId='formCount'
+                        validationState={(this.validateCount() ? null : 'error')}
+                    >
+                        <ControlLabel>Amount seen</ControlLabel>
+                        <FormControl
+                            type='text'
+                            value={this.state.count}
+                            onChange={this.handleCountChange}
+                        />
+                        <FormControl.Feedback />
+                        <HelpBlock>Values above zero are valid.</HelpBlock>
+                    </FormGroup>
+                    <FormGroup
+                        controlId='formTime'
+                        validationState={(this.validateTimeString() ? null : 'error')}
+                    >
+                        <ControlLabel>Time of sighting</ControlLabel>
+                        <FormControl
+                            type='text'
+                            value={this.state.dateString}
+                            onChange={this.handleTimeChange}
+                        />
+                        <FormControl.Feedback />
+                        <HelpBlock>Format 'HH:mm, DD.MM.YYYY'. Only past times are allowed.</HelpBlock>
+                    </FormGroup>
+                    <FormGroup
+                        controlId='formDesc'
+                    >
+                        <ControlLabel>Description</ControlLabel>
+                        <FormControl 
+                            type='text'
+                            value={this.state.description}
+                            placeholder='Additional info...'
+                            onChange={this.handleDescChange}
+                        />
+                    </FormGroup>
+                </Form>
+            </Modal.Body>
+        );
+
+        return (
+            <Modal show={this.props.visible}>
+                <Modal.Header closeButton onClick={this.props.toggleModal}>
+                    <Modal.Title>
+                        {(this.state.isLoaded) ? "Add new sighting" : "Loading..." }
+                    </Modal.Title>
+                </Modal.Header>
+                {(!this.state.isLoaded) ? "" : modalBody}
+                <Modal.Footer>
+                    <Button bsStyle='success' onClick={this.addNew}>Add</Button>
+                    <Button bsStyle='info' onClick={this.props.toggleModal}>Cancel</Button>
+                </Modal.Footer>
+            </Modal>
+        );
     }
 }

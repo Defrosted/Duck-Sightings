@@ -9,9 +9,11 @@
 }
 .header-container {
   width: 100%;
+  max-width: 100%;
   background-color: #F4594F;
   padding: 0;
   overflow: hidden;
+  display: block;
 }
 .header-container .header {
   display: block;
@@ -24,20 +26,6 @@
 .header-container .header .logo {
   display: inline-block;
   max-width: 100px;
-}
-.header-container .dev-bar {
-  width: 100%;
-  padding: 10px;
-  background-color: #D9853B;
-}
-.header-container .dev-bar label,
-.header-container .dev-bar input,
-.header-container .dev-bar button {
-  margin-left: 10px;
-}
-.header-container .dev-bar .form-group {
-  display: block;
-  text-align: center;
 }
 .sightings-container {
   margin: 3% auto;

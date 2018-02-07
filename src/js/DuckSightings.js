@@ -11,7 +11,6 @@ export default class DuckSightings extends React.Component {
         super(props);
         this.state = {
             isLoaded: false,
-            url: this.props.url,
             sortNewest: true,
             showModal: false,
             sightings: []
@@ -21,18 +20,8 @@ export default class DuckSightings extends React.Component {
         this.toggleModal = this.toggleModal.bind(this);
     }
 
-    componentWillReceiveProps(nextProps) {
-        //Update URL if changed
-        if(this.props.url != nextProps.url) {
-            this.setState({
-                url: nextProps.url
-            });
-            this.fetchSightings(nextProps.url);
-        }
-    }
-
     componentDidMount() {
-        this.fetchSightings(this.state.url);
+        this.fetchSightings();
     }
 
     componentWillUnmount() {
@@ -40,9 +29,9 @@ export default class DuckSightings extends React.Component {
         this.reqToken.cancel();
     }
 
-    fetchSightings(url) {
+    fetchSightings() {
         this.reqToken = axios.CancelToken.source();
-        axios.get(url + '/sightings', {
+        axios.get(this.props.url + '/sightings', {
             cancelToken: this.reqToken.token
             })
             .then((result) => {
@@ -51,10 +40,10 @@ export default class DuckSightings extends React.Component {
                     sightings: result.data
                 });
             })
-            .catch(thrown => {
+            .catch((thrown) => {
                 if(!axios.isCancel(thrown))
                     console.log('Error ' + thrown.message);
-            })
+            });
     }
 
     changeSort() {
@@ -73,7 +62,7 @@ export default class DuckSightings extends React.Component {
 
     toggleModal() {
         this.setState({
-            showModal: ((this.state.showModal) ? false : true)
+            showModal: !this.state.showModal
         });
     }
 
@@ -81,50 +70,47 @@ export default class DuckSightings extends React.Component {
         const { isLoaded, showModal, sortNewest, sightings } = this.state;
         this.sortSightings(sightings);
 
-        if (!isLoaded) {
-            return (
-                <div className='container sightings-container'>
-                <DuckAdd visible={showModal} callback={this.fetchSightings}
-                toggle={this.toggleModal} url={this.props.url} />
-                    <div className='sightings-header'>
-                        <h2>Recent duck sightings</h2>
-                    </div>
-                    <div className='duck-sightings'>
-                        <div className='loading'>
-                            <Loading 
-                              className='loading'
-                              type='oval' width={100} height={100}
-                              fill='#558C89'
-                            />
-                        </div>
-                    </div>
+        const headerButtons = (
+            <div className='sightings-header-buttons'>
+                <label>Sorted by:</label>
+                <Button bsStyle='info' onClick={this.changeSort}>
+                    {(sortNewest) ? "Newest" : "Oldest"}
+                </Button>
+                <Button bsStyle='success' onClick={this.toggleModal}>
+                    Add sighting
+                </Button>
+            </div>
+        );
+        const listOfSightings = sightings.map(sighting => {
+            return <DuckInfo key={sighting.id} sighting={sighting} />
+        });
+
+        const loadingElement = (
+            <div className='loading'>
+                <Loading 
+                    className='loading'
+                    type='oval' width={100} height={100}
+                    fill='#558C89'
+                />
+            </div>
+        );
+
+        return (
+            <div className='container sightings-container'>
+                <DuckAdd 
+                    fetchSightings={this.fetchSightings}
+                    toggleModal={this.toggleModal}
+                    url={this.props.url}
+                    visible={this.state.showModal}
+                />
+                <div className='sightings-header'>
+                    <h2>Recent duck sightings</h2>
+                    {(!isLoaded) ? "" : headerButtons }
                 </div>
-            );
-        } else {
-            //Actual render
-            return (
-                <div className='container sightings-container'>
-                <DuckAdd visible={showModal} callback={this.fetchSightings}
-                toggle={this.toggleModal} url={this.props.url} />
-                    <div className='sightings-header'>
-                        <h2>Recent duck sightings</h2>
-                        <div className='sightings-header-buttons'>
-                            <label>Sorted by:</label>
-                            <Button bsStyle='info' onClick={this.changeSort}>
-                                {(sortNewest) ? "Newest" : "Oldest"}
-                            </Button>
-                            <Button bsStyle='success' onClick={this.toggleModal}>
-                                Add sighting
-                            </Button>
-                        </div>
-                    </div>
-                    <div className='duck-sightings'>
-                        {sightings.map(sighting => {
-                            return <DuckInfo key={sighting.id} sighting={sighting} />
-                        })}
-                    </div>
+                <div className='duck-sightings'>
+                    {(!isLoaded) ? loadingElement : listOfSightings }
                 </div>
-            );
-        }
+            </div>
+        );
     }
 }
